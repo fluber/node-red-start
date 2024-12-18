@@ -1,0 +1,43 @@
+# .github/workflows/docker-compose.yml
+name: Run Node-RED with Docker Compose
+
+on: 
+  push:
+    branches:
+      - main  # 當代碼推送到 main 分支時觸發
+
+jobs:
+  run-compose:
+    runs-on: ubuntu-latest  # 使用 GitHub 提供的 Ubuntu 虛擬機
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3  # 拉取您的代碼
+
+    - name: Set up Docker Compose
+      run: |
+        # 安裝 Docker Compose
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+
+    - name: Start Node-RED with Docker Compose
+      run: |
+        # 啟動 Docker Compose
+        docker-compose -f compose.yml up -d
+
+    - name: Verify Containers
+      run: |
+        # 列出正在運行的容器
+        docker ps
+
+    - name: Wait for Node-RED
+      run: |
+        # 等待 Node-RED 啟動完成
+        sleep 10
+        curl -f http://localhost:1880 || exit 1
+
+    - name: Stop Containers
+      if: always()
+      run: |
+        # 停止所有 Docker Compose 容器
+        docker-compose -f compose.yml down
