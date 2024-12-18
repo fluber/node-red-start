@@ -40,7 +40,7 @@ jobs:
       run: |
         # 等待 Node-RED 啟動完成
         sleep 10
-        curl -f http://localhost:1880 || exit 1
+        curl -f http://127.0.0.1:1880 || exit 1
 
     - name: Stop Containers
       if: always()
