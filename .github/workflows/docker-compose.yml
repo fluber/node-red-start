@@ -25,6 +25,12 @@ jobs:
         # 啟動 Docker Compose
         docker-compose -f compose.yml up -d
 
+    - name: Wait for Node-RED to be ready
+      run: |
+        # 等待 Node-RED 啟動完成
+        sleep 30
+    
+
     - name: Verify Containers
       run: |
         # 列出正在運行的容器
